@@ -53,8 +53,19 @@ export default function App() {
     const [watched, setWatched] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [selectedId, setSelectedId] = useState(null);
 
-    const tempQuery = "interstellar";
+    function handlesetQuery(input) {
+        setQuery(input);
+    }
+
+    function handleSelectMovie(id) {
+        setSelectedId((selectedId) => (id === selectedId ? null : id));
+    }
+
+    function handleUnselectMovie() {
+        setSelectedId(null);
+    }
 
     useEffect(
         function () {
@@ -97,7 +108,7 @@ export default function App() {
     return (
         <>
             <NavBar>
-                <Search query={query} setQuery={setQuery} />
+                <Search query={query} onSetQuery={handlesetQuery} />
             </NavBar>
             <Main>
                 <Box>
@@ -105,14 +116,26 @@ export default function App() {
                     {!isLoading && !error && (
                         <>
                             <SearchResult movies={movies} query={query} />{" "}
-                            <MovieList movies={movies} />
+                            <MovieList
+                                movies={movies}
+                                onSelectMovie={handleSelectMovie}
+                            />
                         </>
                     )}
                     {query && error && <ErrorMessage message={error} />}
                 </Box>
                 <Box>
-                    <WatchedSummary watched={watched} />
-                    <WatchedMoviesList watched={watched} />
+                    {selectedId ? (
+                        <MovieDetails
+                            selectedId={selectedId}
+                            onUnselectMovie={handleUnselectMovie}
+                        />
+                    ) : (
+                        <>
+                            <WatchedSummary watched={watched} />
+                            <WatchedMoviesList watched={watched} />
+                        </>
+                    )}
                 </Box>
             </Main>
         </>
@@ -151,23 +174,12 @@ function Logo() {
     );
 }
 
-// function Search({ query, setQuery }) {
-//     return (
-//         <input
-//             className="search"
-//             type="text"
-//             placeholder="Search movies..."
-//             value={query}
-//             onChange={(e) => setQuery(e.target.value)}
-//         />
-//     );
-// }
-function Search({ query, setQuery }) {
+function Search({ query, onSetQuery }) {
     const [input, setInput] = useState(query);
 
     function handleSubmit(e) {
         e.preventDefault();
-        setQuery(input); // Set the query only on submit
+        onSetQuery(input); // Set the query only on submit
     }
 
     return (
@@ -230,19 +242,23 @@ function SearchResult({ movies, query }) {
     );
 }
 
-function MovieList({ movies }) {
+function MovieList({ movies, onSelectMovie }) {
     return (
-        <ul className="list">
+        <ul className="list list-movies">
             {movies?.map((movie) => (
-                <Movie movie={movie} key={movie.imdbID} />
+                <Movie
+                    movie={movie}
+                    key={movie.imdbID}
+                    onSelectMovie={onSelectMovie}
+                />
             ))}
         </ul>
     );
 }
 
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
     return (
-        <li>
+        <li onClick={() => onSelectMovie(movie.imdbID)}>
             <img src={movie.Poster} alt={`${movie.Title} poster`} />
             <h3>{movie.Title}</h3>
             <div>
@@ -252,6 +268,17 @@ function Movie({ movie }) {
                 </p>
             </div>
         </li>
+    );
+}
+
+function MovieDetails({ selectedId, onUnselectMovie }) {
+    return (
+        <>
+            <div className="details">{selectedId}</div>
+            <button className="btn-back" onClick={onUnselectMovie}>
+                &lt;
+            </button>
+        </>
     );
 }
 
