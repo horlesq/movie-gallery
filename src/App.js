@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
     {
@@ -45,10 +45,54 @@ const tempWatchedData = [
 const average = (arr) =>
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const OMBD_KEY = "bb07e4d";
+
 export default function App() {
     const [query, setQuery] = useState("");
-    const [movies, setMovies] = useState(tempMovieData);
-    const [watched, setWatched] = useState(tempWatchedData);
+    const [movies, setMovies] = useState([]);
+    const [watched, setWatched] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const tempQuery = "interstellar";
+
+    useEffect(
+        function () {
+            async function fetchMovies() {
+                try {
+                    setIsLoading(true);
+                    setError("");
+
+                    const result = await fetch(
+                        `http://www.omdbapi.com/?apikey=${OMBD_KEY}&s=${query}`
+                    );
+                    if (!result.ok)
+                        throw new Error(
+                            "Something went wrong with fetching movies!"
+                        );
+
+                    const data = await result.json();
+                    if (data.Response == "False")
+                        throw new Error("Movie not found!");
+
+                    setMovies(data.Search);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+
+            if (!query.length) {
+                setMovies([]);
+                setError("");
+                return;
+            }
+
+            fetchMovies();
+        },
+        [query]
+    );
 
     return (
         <>
@@ -57,8 +101,14 @@ export default function App() {
             </NavBar>
             <Main>
                 <Box>
-                    <NumResults movies={movies} query={query} />
-                    <MovieList movies={movies} />
+                    {isLoading && <Loader />}
+                    {!isLoading && !error && (
+                        <>
+                            <SearchResult movies={movies} query={query} />{" "}
+                            <MovieList movies={movies} />
+                        </>
+                    )}
+                    {query && error && <ErrorMessage message={error} />}
                 </Box>
                 <Box>
                     <WatchedSummary watched={watched} />
@@ -66,6 +116,20 @@ export default function App() {
                 </Box>
             </Main>
         </>
+    );
+}
+
+function Loader() {
+    return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+    return (
+        <p className="error">
+            <span>⚠️ </span>
+            {message}
+            <span> ⚠️</span>
+        </p>
     );
 }
 
@@ -87,15 +151,38 @@ function Logo() {
     );
 }
 
+// function Search({ query, setQuery }) {
+//     return (
+//         <input
+//             className="search"
+//             type="text"
+//             placeholder="Search movies..."
+//             value={query}
+//             onChange={(e) => setQuery(e.target.value)}
+//         />
+//     );
+// }
 function Search({ query, setQuery }) {
+    const [input, setInput] = useState(query);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        setQuery(input); // Set the query only on submit
+    }
+
     return (
-        <input
-            className="search"
-            type="text"
-            placeholder="Search movies..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-        />
+        <form className="search-form" onSubmit={handleSubmit}>
+            <input
+                className="search"
+                type="text"
+                placeholder="Enter a movie title..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)} // Update local state
+            />
+            <button className="search-btn" type="submit">
+                Search
+            </button>
+        </form>
     );
 }
 
@@ -119,7 +206,7 @@ function Box({ children }) {
     );
 }
 
-function NumResults({ movies, query }) {
+function SearchResult({ movies, query }) {
     return (
         <div className="summary">
             {query ? (
@@ -135,7 +222,9 @@ function NumResults({ movies, query }) {
                     </div>
                 </>
             ) : (
-                <h2>Start by searching for a movie title ⏸️</h2>
+                <h2>
+                    Start by searching for a movie title ⏸️ <br /> <br />
+                </h2>
             )}
         </div>
     );

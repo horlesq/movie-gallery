@@ -95,6 +95,29 @@ body {
     color: #fff;
 }
 
+.search-form {
+    display: flex;
+    align-items: center; /* Vertically align the input and button */
+}
+
+.search-btn {
+    justify-self: center;
+    border: none;
+    margin-left: 2rem;
+    padding: 1.1rem 1.6rem;
+    font-size: 1.8rem;
+    border-radius: 0.7rem;
+    transition: all 0.3s;
+    color: var(--color-text);
+    cursor: pointer;
+
+    background-color: var(--color-primary-light);
+}
+
+.search-btn:hover {
+    background-color: #2980b9; /* Darken the button on hover */
+}
+
 .search {
     justify-self: center;
     border: none;
@@ -105,7 +128,6 @@ body {
     transition: all 0.3s;
     color: var(--color-text);
 
-    /* background-color: var(--color-background-900); */
     background-color: var(--color-primary-light);
 }
 
