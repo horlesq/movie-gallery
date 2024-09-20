@@ -29,6 +29,7 @@ export default function StarRating({
     messages = [],
     defaultRating = 0,
     onSetRating,
+    diplayText = true,
 }) {
     const [rating, setRating] = useState(defaultRating);
     const [hoverRating, setHoverRating] = useState(0);
@@ -64,11 +65,15 @@ export default function StarRating({
                     />
                 ))}
             </div>
-            <p style={textStyle}>
-                {messages.length === maxRating
-                    ? messages[hoverRating ? hoverRating - 1 : rating - 1]
-                    : hoverRating || rating || ""}
-            </p>
+            {diplayText ? (
+                <p style={textStyle}>
+                    {messages.length === maxRating
+                        ? messages[hoverRating ? hoverRating - 1 : rating - 1]
+                        : hoverRating || rating || ""}
+                </p>
+            ) : (
+                ""
+            )}
         </div>
     );
 }
