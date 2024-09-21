@@ -73,6 +73,7 @@ export default function App() {
                 return;
             }
 
+            handleUnselectMovie();
             fetchMovies();
 
             return function () {
@@ -277,6 +278,23 @@ function MovieDetails({ selectedId, onUnselectMovie, onAddWatched, watched }) {
         onAddWatched(watchedMovie);
         onUnselectMovie();
     }
+
+    useEffect(
+        function () {
+            function callback(event) {
+                if (event.code === "Escape") {
+                    onUnselectMovie();
+                }
+            }
+
+            document.addEventListener("keydown", callback);
+
+            return function () {
+                document.removeEventListener("keydown", callback);
+            };
+        },
+        [onUnselectMovie]
+    );
 
     useEffect(
         function () {
