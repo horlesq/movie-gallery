@@ -11,6 +11,7 @@ const startContainerStyle = {
     display: "flex",
 };
 
+// Define prop types for the StarRating component
 StarRating.propTypes = {
     maxRating: PropTypes.number,
     color: PropTypes.string,
@@ -31,12 +32,13 @@ export default function StarRating({
     onSetRating,
     diplayText = true,
 }) {
-    const [rating, setRating] = useState(defaultRating);
-    const [hoverRating, setHoverRating] = useState(0);
+    const [rating, setRating] = useState(defaultRating); // State to hold the current rating
+    const [hoverRating, setHoverRating] = useState(0); // State to hold the hover rating
 
+    // Function to handle when a user selects a rating
     function handleRating(rating) {
-        setRating(rating);
-        if (onSetRating) onSetRating(rating);
+        setRating(rating); // Set the current rating
+        if (onSetRating) onSetRating(rating); // Call the onSetRating function if provided
     }
 
     const textStyle = {
@@ -52,32 +54,34 @@ export default function StarRating({
                 {Array.from({ length: maxRating }, (_, idx) => (
                     <Star
                         key={idx}
-                        onSetRating={() => handleRating(idx + 1)}
+                        onSetRating={() => handleRating(idx + 1)} // Set rating when a star is clicked
                         isFull={
                             hoverRating
-                                ? hoverRating - idx > 0
-                                : rating - idx > 0
+                                ? hoverRating - idx > 0 // Show full stars when hovered
+                                : rating - idx > 0 // Otherwise, show full stars based on current rating
                         }
-                        onHoverIn={() => setHoverRating(idx + 1)}
-                        onHoverOut={() => setHoverRating(0)}
-                        color={color}
-                        size={size}
+                        onHoverIn={() => setHoverRating(idx + 1)} // Set hover rating when mouse enters a star
+                        onHoverOut={() => setHoverRating(0)} // Reset hover rating when mouse leaves
+                        color={color} // Set star color
+                        size={size} // Set star size
                     />
                 ))}
             </div>
             {diplayText ? (
                 <p style={textStyle}>
                     {messages.length === maxRating
-                        ? messages[hoverRating ? hoverRating - 1 : rating - 1]
-                        : hoverRating || rating || ""}
+                        ? messages[hoverRating ? hoverRating - 1 : rating - 1] // Show message corresponding to hover or current rating
+                        : hoverRating || rating || ""}{" "}
+                    {/* Display hover rating or current rating */}
                 </p>
             ) : (
-                ""
+                "" // If diplayText is false, don't show any text
             )}
         </div>
     );
 }
 
+// Star component representing individual stars
 function Star({ onSetRating, isFull, onHoverIn, onHoverOut, color, size }) {
     const starStyle = {
         width: `${size}px`,
@@ -90,11 +94,11 @@ function Star({ onSetRating, isFull, onHoverIn, onHoverOut, color, size }) {
         <span
             role="button"
             style={starStyle}
-            onClick={onSetRating}
-            onMouseEnter={onHoverIn}
-            onMouseLeave={onHoverOut}
+            onClick={onSetRating} // Set rating when star is clicked
+            onMouseEnter={onHoverIn} // Trigger hover effect when mouse enters
+            onMouseLeave={onHoverOut} // Remove hover effect when mouse leaves
         >
-            {isFull ? (
+            {isFull ? ( // If the star is full (hover or rating), display the filled star
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
@@ -104,6 +108,7 @@ function Star({ onSetRating, isFull, onHoverIn, onHoverOut, color, size }) {
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
             ) : (
+                // If the star is not full, display the outlined star
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
