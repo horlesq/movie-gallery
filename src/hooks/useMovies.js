@@ -61,6 +61,5 @@ export function useMovies(query, callback) {
         [query, callback] // Re-run effect whenever the query changes
     );
 
-    console.log(1);
     return { movies, isLoading, error };
 }

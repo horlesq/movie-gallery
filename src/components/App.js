@@ -19,13 +19,13 @@ export default function App() {
         return storedValue ? JSON.parse(storedValue) : []; // Fallback to empty array if null
     }); // List of watched movies - get data from local storage at initial render
 
-    // Memoized callback for when movies are fetched
-    const callbackUseMovies = useCallback(() => {
-        handleUnselectMovie();
+    // Unselect the current movie
+    const handleUnselectMovie = useCallback(() => {
+        setSelectedId(null);
     }, []);
 
     // Custom Hook for fething movies based on the search query
-    const { movies, isLoading, error } = useMovies(query, callbackUseMovies);
+    const { movies, isLoading, error } = useMovies(query, handleUnselectMovie);
 
     // Handle search query input and update state
     function handleQueryChange(input) {
@@ -36,10 +36,6 @@ export default function App() {
     function handleSelectMovie(id) {
         setSelectedId((selectedId) => (id === selectedId ? null : id));
     }
-
-    const handleUnselectMovie = useCallback(() => {
-        setSelectedId(null);
-    }, []);
 
     // Add a movie to the watched list
     function handleAddWatched(movie) {
