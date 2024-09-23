@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 
 export const OMBD_KEY = "bb07e4d";
 
+/**
+ * Custom hook for fetching movies based on a search query.
+ *
+ * @param {string} query - The search query for fetching movies.
+ * @param {function} callback - Optional callback to execute when the effect runs.
+ * @returns {{ movies: Array, isLoading: boolean, error: string }} - Returns an object containing movies, loading state, and error message.
+ */
 export function useMovies(query, callback) {
     const [movies, setMovies] = useState([]); // List of movies returned by the API
     const [isLoading, setIsLoading] = useState(false); // Loading state for API requests
@@ -9,10 +16,12 @@ export function useMovies(query, callback) {
 
     useEffect(
         function () {
+            // Execute the callback if provided
             callback?.();
 
             const controller = new AbortController(); // To abort fetch requests if needed
 
+            // Function to fetch movies from the API
             async function fetchMovies() {
                 try {
                     setIsLoading(true); // Set loading state to true
