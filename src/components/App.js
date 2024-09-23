@@ -15,7 +15,10 @@ export default function App() {
     // State management
     const [query, setQuery] = useState(""); // Search query for movies
     const [movies, setMovies] = useState([]); // List of movies returned by the API
-    const [watched, setWatched] = useState([]); // List of watched movies
+    const [watched, setWatched] = useState(function () {
+        const storedValue = localStorage.getItem("watched");
+        return JSON.parse(storedValue);
+    }); // List of watched movies - get data from local storage at initial render
     const [isLoading, setIsLoading] = useState(false); // Loading state for API requests
     const [error, setError] = useState(""); // Error message state
     const [selectedId, setSelectedId] = useState(null); // Currently selected movie ID
@@ -44,6 +47,13 @@ export default function App() {
     function handleRemoveWatched(id) {
         setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
     }
+
+    useEffect(
+        function () {
+            localStorage.setItem("watched", JSON.stringify(watched));
+        },
+        [watched]
+    );
 
     // Effect to fetch movies based on the search query
     useEffect(
