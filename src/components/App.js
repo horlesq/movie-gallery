@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { NavBar } from "./NavBar";
 import { Search } from "./Search";
 import { MovieList } from "./MovieList";
