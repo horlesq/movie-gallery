@@ -17,7 +17,7 @@ export default function App() {
     const [movies, setMovies] = useState([]); // List of movies returned by the API
     const [watched, setWatched] = useState(function () {
         const storedValue = localStorage.getItem("watched");
-        return JSON.parse(storedValue);
+        return storedValue ? JSON.parse(storedValue) : []; // Fallback to empty array if null
     }); // List of watched movies - get data from local storage at initial render
     const [isLoading, setIsLoading] = useState(false); // Loading state for API requests
     const [error, setError] = useState(""); // Error message state
