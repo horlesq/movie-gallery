@@ -9,18 +9,16 @@ import { SearchResult } from "./SearchResult";
 import { Loader } from "./Loader";
 import { ErrorMessage } from "./ErrorMessage";
 import { useMovies } from "../hooks/useMovies";
+import { useLocalStorageState } from "../hooks/useLocalStorageState";
 
 export default function App() {
     // State management
     const [query, setQuery] = useState(""); // Search query for movies
     const [selectedId, setSelectedId] = useState(null); // Currently selected movie ID
-    const [watched, setWatched] = useState(function () {
-        const storedValue = localStorage.getItem("watched");
-        return storedValue ? JSON.parse(storedValue) : []; // Fallback to empty array if null
-    }); // List of watched movies - get data from local storage at initial render
-
+    const [watched, setWatched] = useLocalStorageState([], "watched"); // List of watched movies - get data fro local storage at initial render
+    
     // Unselect the current movie
-    const handleUnselectMovie = useCallback(() => {
+    const handleUnselectMovie = useCallback(function () {
         setSelectedId(null);
     }, []);
 
@@ -46,14 +44,6 @@ export default function App() {
     function handleRemoveWatched(id) {
         setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
     }
-
-    // Persist watched movies to local storage
-    useEffect(
-        function () {
-            localStorage.setItem("watched", JSON.stringify(watched));
-        },
-        [watched]
-    );
 
     return (
         <>
