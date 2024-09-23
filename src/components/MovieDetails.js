@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { OMBD_KEY } from "../hooks/useMovies";
 import { Loader } from "./Loader";
 import StarRating from "./StarRating";
+import { useKey } from "../hooks/useKey";
 
 // Movie details section for the selected movie
 export function MovieDetails({
@@ -37,24 +38,8 @@ export function MovieDetails({
         onUnselectMovie();
     }
 
-    // Effect to handle "Escape" key press to unselect movie
-    useEffect(
-        function () {
-            function callback(event) {
-                if (event.code === "Escape") {
-                    onUnselectMovie(); // Unselect the movie on "Escape" key press
-                }
-            }
-
-            document.addEventListener("keydown", callback); // Add event listener
-
-            // Cleanup function to remove the event listener when component unmounts
-            return function () {
-                document.removeEventListener("keydown", callback);
-            };
-        },
-        [onUnselectMovie] // Effect depends on the unselect function
-    );
+    // Custom hook to handle keyboard event
+    useKey("Escape", onUnselectMovie);
 
     // Effect to fetch movie details based on selectedId
     useEffect(
