@@ -23,6 +23,7 @@ A simple React application for searching and rating movies. This app allows user
 - **Movie Details**: View detailed information such as year, director, actors, and plot.
 - **Rate Movies**: Rate movies using a star rating system.
 - **Watched Movies Summary**: View a stats summary of your watched and rated movies.
+- **Watched Movies Storage**: Add movies to a "watched" list, which is stored locally using localStorage.
 
 ## Demo
 
