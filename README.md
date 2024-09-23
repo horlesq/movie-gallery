@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# Movie Gallery
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple React application for searching and rating movies. This app allows users to search for movies using the OMDb API, view detailed information, and rate them.
 
-## Available Scripts
+![image](https://github.com/user-attachments/assets/f9674d84-b5da-496d-a851-aba00196d136)
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Table of Contents
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [Features](#features)
+- [Demo](#demo)
+- [Usage](#usage)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [License](#license)
+- [Contact](#contact)
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- **Search Movies**: Search for movies by title.
+- **Movie Details**: View detailed information such as year, director, actors, and plot.
+- **Rate Movies**: Rate movies using a star rating system.
+- **Watched Movies Summary**: View a stats summary of your watched and rated movies.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Demo
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Check out the live demo of the project at: [Movie-Gallery](https://movie-gallery-horly.netlify.app/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Usage
 
-### `npm run eject`
+- **Search for Movies**: Enter the movie title in the search bar to fetch details from the OMDb API.
+- **View Movie Details**: Click on a movie from the search results to view detailed information.
+- **Rate a Movie**: Use the star rating system to give your rating to a movie.
+- **Clearing the List**: Click the "Clear" button to remove all items from the list.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Technologies
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- React
+- [OMDb API](https://www.omdbapi.com/)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To get started with this project, follow these steps:
+1. **Clone the repository**:
+```bash
+git clone https://github.com/horlesq/movie-gallery.git
+```
+2. **Navigate to the project directory**:
+```bash
+cd movie-gallery
+```
+3. **Install dependencies**: Make sure you have [Node.js](https://nodejs.org/en) installed, then run:
+```bash
+npm install
+```
+4. **Start the development server**: 
+```bash
+npm start
+```
+5. Open your browser and go to http://localhost:3000 to see the application in action.
 
-## Learn More
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contact
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+For any inquiries or feedback, feel free to reach out via:
 
-### Code Splitting
+- Email: adrian.horlescu@gmail.com
+- Linkedin [Adrian Horlescu](https://www.linkedin.com/in/adrian-horlescu/)
+- GitHub: [Horlesq](https://github.com/horlesq)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This application is a modified version of a project teached in [The Ultimate React Course 2024](https://www.udemy.com/course/the-ultimate-react-course)
