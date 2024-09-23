@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { OMBD_KEY } from "./App";
+import { OMBD_KEY } from "../hooks/useMovies";
 import { Loader } from "./Loader";
 import StarRating from "./StarRating";
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
 import { Search } from "./Search";
 import { MovieList } from "./MovieList";
@@ -8,20 +8,24 @@ import { WatchedMoviesList } from "./WatchedMoviesList";
 import { SearchResult } from "./SearchResult";
 import { Loader } from "./Loader";
 import { ErrorMessage } from "./ErrorMessage";
-
-export const OMBD_KEY = "bb07e4d";
+import { useMovies } from "../hooks/useMovies";
 
 export default function App() {
     // State management
     const [query, setQuery] = useState(""); // Search query for movies
-    const [movies, setMovies] = useState([]); // List of movies returned by the API
+    const [selectedId, setSelectedId] = useState(null); // Currently selected movie ID
     const [watched, setWatched] = useState(function () {
         const storedValue = localStorage.getItem("watched");
         return storedValue ? JSON.parse(storedValue) : []; // Fallback to empty array if null
     }); // List of watched movies - get data from local storage at initial render
-    const [isLoading, setIsLoading] = useState(false); // Loading state for API requests
-    const [error, setError] = useState(""); // Error message state
-    const [selectedId, setSelectedId] = useState(null); // Currently selected movie ID
+
+    // Memoized callback for when movies are fetched
+    const callbackUseMovies = useCallback(() => {
+        handleUnselectMovie();
+    }, []);
+
+    // Custom Hook for fething movies based on the search query
+    const { movies, isLoading, error } = useMovies(query, callbackUseMovies);
 
     // Handle search query input and update state
     function handleQueryChange(input) {
@@ -33,10 +37,9 @@ export default function App() {
         setSelectedId((selectedId) => (id === selectedId ? null : id));
     }
 
-    // Unselect the current movie
-    function handleUnselectMovie() {
+    const handleUnselectMovie = useCallback(() => {
         setSelectedId(null);
-    }
+    }, []);
 
     // Add a movie to the watched list
     function handleAddWatched(movie) {
@@ -48,64 +51,12 @@ export default function App() {
         setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
     }
 
+    // Persist watched movies to local storage
     useEffect(
         function () {
             localStorage.setItem("watched", JSON.stringify(watched));
         },
         [watched]
-    );
-
-    // Effect to fetch movies based on the search query
-    useEffect(
-        function () {
-            const controller = new AbortController(); // To abort fetch requests if needed
-
-            async function fetchMovies() {
-                try {
-                    setIsLoading(true); // Set loading state to true
-                    setError(""); // Clear previous error messages
-
-                    // Fetch movies from OMDB API using the search query
-                    const result = await fetch(
-                        `http://www.omdbapi.com/?apikey=${OMBD_KEY}&s=${query}`,
-                        { signal: controller.signal } // Use signal for aborting fetch
-                    );
-                    if (!result.ok)
-                        throw new Error(
-                            "Something went wrong with fetching movies!"
-                        );
-
-                    const data = await result.json();
-                    if (data.Response === "False")
-                        throw new Error("Movie not found!");
-
-                    setMovies(data.Search); // Update movies state with API data
-                    setError(""); // Clear any error if fetch is successful
-                } catch (err) {
-                    // If the error isn't caused by the abort, set error state
-                    if (err.name !== "AbortError") {
-                        setError(err.message);
-                    }
-                } finally {
-                    setIsLoading(false); // Set loading state to false
-                }
-            }
-
-            // If the query is empty, reset movies and errors
-            if (!query.length) {
-                setMovies([]);
-                setError("");
-                return;
-            }
-
-            handleUnselectMovie(); // Unselect movie when making a new search
-            fetchMovies(); // Fetch movies
-
-            return function () {
-                controller.abort(); // Abort fetch if component unmounts or query changes
-            };
-        },
-        [query] // Re-run effect whenever the query changes
     );
 
     return (
